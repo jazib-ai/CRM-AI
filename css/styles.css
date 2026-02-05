@@ -1,0 +1,563 @@
+:root {
+    /* HubSpot Official Palette */
+    --primary-color: #ff7a59;
+    /* HubSpot Orange */
+    --primary-hover: #ff8f73;
+    --link-color: #00a4bd;
+    /* HubSpot Blue */
+    --link-hover: #008ca3;
+    --success-color: #00bda5;
+    /* HubSpot Teal */
+    --warning-color: #f59e0b;
+    --danger-color: #f2545b;
+    /* HubSpot Redish */
+    --info-color: #3b82f6;
+
+    --bg-body: #f8fafc;
+    /* HubSpot Gray 50 */
+    --bg-surface: rgba(255, 255, 255, 0.7);
+    --bg-sidebar: #2d3e50;
+    /* HubSpot Navy */
+    --bg-sidebar-accent: #33475b;
+    /* HubSpot Navy Light */
+
+    --text-main: #0f172a;
+    /* Dark Slate Blue */
+    --text-muted: #64748b;
+    /* Gray Slate */
+    --text-on-dark: #f5f8fa;
+
+    --border-color: rgba(226, 232, 240, 0.5);
+    /* Slate Blue Gray */
+    --border-focus: #3b82f6;
+
+    /* Effects - Glassmorphism */
+    --glass-bg: rgba(255, 255, 255, 0.75);
+    --glass-border: rgba(255, 255, 255, 0.5);
+    --glass-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.07);
+    --glass-blur: blur(12px);
+
+    /* Gradients */
+    --grad-primary: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%);
+    --grad-surface: rgba(255, 255, 255, 0.8);
+
+    /* Layout */
+    --sidebar-width: 240px;
+    --sidebar-collapsed-width: 72px;
+    --spacing-xs: 0.25rem;
+    --spacing-sm: 0.5rem;
+    --spacing-md: 1rem;
+    --spacing-lg: 1.5rem;
+    --spacing-xl: 2.25rem;
+
+    --transition-fast: 0.15s ease-out;
+    --transition-normal: 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    background: linear-gradient(135deg, #f8fafc 0%, #eff6ff 50%, #fdf4ff 100%);
+    background-attachment: fixed;
+    color: var(--text-main);
+    line-height: 1.6;
+    height: 100vh;
+    overflow: hidden;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+    font-family: inherit;
+    font-weight: 600;
+}
+
+#app {
+    display: flex;
+    height: 100%;
+}
+
+/* Sidebar */
+.sidebar {
+    width: var(--sidebar-collapsed-width);
+    background-color: var(--bg-sidebar);
+    color: var(--text-on-dark);
+    display: flex;
+    flex-direction: column;
+    padding: 1.25rem 0;
+    z-index: 1000;
+    overflow: visible;
+    position: relative;
+    border-right: 1px solid rgba(255, 255, 255, 0.05);
+    transition: all var(--transition-normal);
+    /* Smooth width transition */
+}
+
+/* Sidebar hidden state */
+.sidebar-hidden .sidebar {
+    width: 0;
+    padding: 0;
+    opacity: 0;
+    pointer-events: none;
+    border-right-width: 0;
+}
+
+/* Adjust main content when sidebar is hidden */
+.sidebar-hidden .main-content {
+    margin-left: 0;
+}
+
+.sidebar .nav-item {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 1rem 0 !important;
+    position: relative;
+    color: rgba(255, 255, 255, 0.5);
+    text-decoration: none;
+    transition: all 0.2s;
+}
+
+.sidebar .nav-item:hover {
+    color: #fff;
+    background: rgba(255, 255, 255, 0.08);
+}
+
+.sidebar .nav-item svg {
+    min-width: 20px;
+}
+
+/* Tooltip implementation */
+.sidebar .nav-item span {
+    position: absolute;
+    left: 80%;
+    margin-left: 15px;
+    background: #0f172a;
+    color: #fff;
+    padding: 0.5rem 1rem;
+    border-radius: 8px;
+    font-size: 0.85rem;
+    font-weight: 600;
+    white-space: nowrap;
+    opacity: 0;
+    pointer-events: none;
+    transform: translateX(-10px);
+    transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.3);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    z-index: 2000;
+}
+
+.sidebar .nav-item:hover span {
+    opacity: 1;
+    transform: translateX(5px);
+}
+
+/* Tooltip Arrow */
+.sidebar .nav-item span::before {
+    content: '';
+    position: absolute;
+    left: -4px;
+    top: 50%;
+    transform: translateY(-50%) rotate(45deg);
+    width: 8px;
+    height: 8px;
+    background: #0f172a;
+    border-left: 1px solid rgba(255, 255, 255, 0.1);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.logo-area {
+    padding: 1rem 0 !important;
+    display: flex;
+    justify-content: center;
+    margin-bottom: 1.5rem;
+}
+
+.logo-area h2 {
+    display: none;
+}
+
+.logo-area div {
+    min-width: 32px;
+}
+
+/* Main Content */
+.main-content {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    position: relative;
+    transition: margin-left var(--transition-normal);
+}
+
+/* Navbar */
+.top-navbar {
+    height: 64px;
+    background-color: var(--bg-surface);
+    border-bottom: 1px solid var(--border-color);
+    display: flex;
+    align-items: center;
+    padding: 0 var(--spacing-xl);
+    justify-content: space-between;
+}
+
+/* Content Container */
+.content-container {
+    flex: 1;
+    overflow-y: auto;
+    padding: var(--spacing-xl);
+}
+
+/* Utility Classes */
+/* Record Page Layout (3 panes) */
+.record-container {
+    display: grid;
+    grid-template-columns: 320px 1fr 300px;
+    gap: 0;
+    height: calc(100vh - 64px);
+    overflow: hidden;
+    background: var(--bg-body);
+}
+
+.record-left-pane {
+    background: white;
+    border-right: 1px solid var(--border-color);
+    padding: 1.5rem;
+    overflow-y: auto;
+}
+
+.record-center-pane {
+    overflow-y: auto;
+    padding: 1.5rem;
+}
+
+.record-right-pane {
+    background: white;
+    border-left: 1px solid var(--border-color);
+    padding: 1.5rem;
+    overflow-y: auto;
+}
+
+/* HubSpot Utility Classes */
+.btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0.5rem 1.25rem;
+    border-radius: 3px;
+    /* HubSpot is quite square/slightly rounded */
+    font-weight: 600;
+    cursor: pointer;
+    transition: all var(--transition-fast);
+    border: 1px solid transparent;
+    font-family: inherit;
+    font-size: 0.875rem;
+}
+
+.btn-primary {
+    background-color: var(--primary-color);
+    color: white;
+    border-color: var(--primary-color);
+}
+
+.btn-primary:hover {
+    background-color: var(--primary-hover);
+    border-color: var(--primary-hover);
+    transform: none;
+    box-shadow: none;
+}
+
+.btn-secondary {
+    background-color: #f5f8fa;
+    color: var(--link-color);
+    border-color: #cbd6e2;
+}
+
+.btn-secondary:hover {
+    background-color: #eaf0f6;
+    border-color: #516f90;
+}
+
+.card {
+    background: var(--bg-surface);
+    border-radius: 3px;
+    border: 1px solid var(--border-color);
+    padding: var(--spacing-md);
+    margin-bottom: var(--spacing-md);
+}
+
+.card:hover {
+    transform: none;
+    box-shadow: none;
+}
+
+.card-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: var(--spacing-lg);
+}
+
+.stat-value {
+    font-size: 1.875rem;
+    font-weight: 700;
+    color: var(--text-main);
+    letter-spacing: -0.025em;
+}
+
+.stat-label {
+    font-size: 0.875rem;
+    font-weight: 500;
+    color: var(--text-muted);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+}
+
+.stat-trend {
+    font-size: 0.75rem;
+    font-weight: 600;
+    padding: 0.125rem 0.5rem;
+    border-radius: 9999px;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.25rem;
+}
+
+.trend-up {
+    background-color: #dcfce7;
+    color: #166534;
+}
+
+.trend-down {
+    background-color: #fee2e2;
+    color: #991b1b;
+}
+
+/* Modal Styles */
+.modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(0, 0, 0, 0.5);
+    backdrop-filter: blur(4px);
+    display: none;
+    /* Hidden by default */
+    align-items: center;
+    justify-content: center;
+    z-index: 100;
+}
+
+.modal-content {
+    background-color: var(--bg-surface);
+    border-radius: 1rem;
+    box-shadow: var(--shadow-lg);
+    width: 100%;
+    max-width: 600px;
+    max-height: 90vh;
+    overflow-y: auto;
+    position: relative;
+    border: 1px solid var(--border-color);
+    animation: modalSlideIn 0.3s ease;
+}
+
+@keyframes modalSlideIn {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.form-group {
+    margin-bottom: 1.25rem;
+}
+
+.form-label {
+    display: block;
+    margin-bottom: 0.5rem;
+    font-weight: 500;
+    color: var(--text-main);
+    font-size: 0.875rem;
+}
+
+.form-input,
+.form-select,
+.form-textarea {
+    width: 100%;
+    padding: 0.625rem;
+    border: 1px solid var(--border-color);
+    border-radius: 0.5rem;
+    font-family: inherit;
+    font-size: 0.95rem;
+    background-color: #f9fafb;
+    transition: all 0.2s;
+}
+
+.form-input:focus,
+.form-select:focus,
+.form-textarea:focus {
+    outline: none;
+    border-color: var(--primary-color);
+    background-color: white;
+    box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.1);
+}
+
+.form-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1rem;
+}
+
+/* Operations Cockpit (Enterprise Dashboard) */
+.cockpit-grid {
+    display: grid;
+    grid-template-columns: repeat(12, 1fr);
+    gap: 2rem;
+}
+
+.kpi-card {
+    background: rgba(255, 255, 255, 0.4);
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    border-radius: 24px;
+    padding: 1.75rem;
+    cursor: pointer;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.kpi-card:hover {
+    transform: translateY(-8px);
+    background: rgba(255, 255, 255, 0.85);
+    border-color: #3b82f6;
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.08);
+}
+
+.sticky-note {
+    padding: 1.25rem;
+    border-radius: 16px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+    position: relative;
+    transition: all 0.2s;
+    transform: rotate(-1deg);
+}
+
+.sticky-note:hover {
+    transform: rotate(1deg) scale(1.03);
+    z-index: 10;
+    box-shadow: 0 12px 24px rgba(0, 0, 0, 0.1);
+}
+
+.todo-item {
+    background: white;
+    border-radius: 16px;
+    border: 1px solid #f1f5f9;
+    padding: 1.25rem;
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    transition: all 0.2s ease;
+}
+
+.todo-item:hover {
+    transform: translateX(5px);
+    border-color: #3b82f6;
+}
+
+.todo-item.completed {
+    opacity: 0.6;
+}
+
+.task-checkbox {
+    width: 20px;
+    height: 20px;
+    appearance: none;
+    border: 2px solid #e2e8f0;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: all 0.2s;
+    position: relative;
+}
+
+.task-checkbox:checked {
+    background: #3b82f6;
+    border-color: #3b82f6;
+}
+
+.task-checkbox:checked::after {
+    content: '✓';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    color: white;
+    font-size: 11px;
+    font-weight: 900;
+}
+
+.cockpit-select,
+.cockpit-input {
+    background: transparent;
+    border: none;
+    outline: none;
+    color: var(--text-main);
+    font-weight: 600;
+    font-size: 0.9rem;
+    padding: 0.4rem 0.8rem;
+}
+
+.add-note-btn {
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    background: var(--text-main);
+    color: white;
+    border: none;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.25rem;
+    cursor: pointer;
+    transition: transform 0.2s;
+}
+
+.add-note-btn:hover {
+    transform: scale(1.1);
+}
+
+.add-task-btn {
+    background: var(--text-main);
+    color: white;
+    border: none;
+    border-radius: 10px;
+    padding: 0.5rem 1rem;
+    font-weight: 600;
+    font-size: 0.85rem;
+    cursor: pointer;
+}
+
+.draggable-section {
+    cursor: grab;
+}
+
+.draggable-section:active {
+    cursor: grabbing;
+}

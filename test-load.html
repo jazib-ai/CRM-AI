@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Script Load Test</title>
+</head>
+
+<body>
+    <h1>Testing Script Loads</h1>
+    <div id="output"></div>
+
+    <script>
+        window.NexoGenix = window.NexoGenix || {};
+        window.NexoGenix.data = {
+            contacts: [],
+            companies: [],
+            deals: [],
+            activities: []
+        };
+        window.NexoGenix.auth = {
+            isAuthenticated: () => true,
+            getUser: () => ({ id: 1, name: 'Test', role: 'admin' }),
+            getAllUsers: () => [{ id: 1, name: 'Test', role: 'admin' }]
+        };
+        window.NexoGenix.store = {
+            cache: { deals: [] },
+            isElectron: false,
+            save: () => { },
+            getDeals: () => [],
+            addDeal: () => { },
+            updateDeal: () => { }
+        };
+    </script>
+
+    <script src="js/views/CompanyDetails.js"></script>
+    <script src="js/views/ContactDetails.js"></script>
+    <script src="js/views/Deals.js"></script>
+
+    <script>
+        const output = document.getElementById('output');
+        const results = [];
+
+        if (typeof window.NexoGenix.CompanyDetails !== 'undefined') {
+            results.push('✓ CompanyDetails loaded');
+        } else {
+            results.push('✗ CompanyDetails FAILED');
+        }
+
+        if (typeof window.NexoGenix.ContactDetails !== 'undefined') {
+            results.push('✓ ContactDetails loaded');
+        } else {
+            results.push('✗ ContactDetails FAILED');
+        }
+
+        if (typeof window.NexoGenix.Deals !== 'undefined') {
+            results.push('✓ Deals loaded');
+        } else {
+            results.push('✗ Deals FAILED');
+        }
+
+        output.innerHTML = results.join('<br>');
+        console.log('Test Results:', results);
+    </script>
+</body>
+
+</html>

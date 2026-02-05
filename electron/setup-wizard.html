@@ -1,0 +1,295 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NexoGenix CRM - Setup Wizard</title>
+    <link rel="stylesheet" href="../css/styles.css">
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+        }
+
+        .wizard-container {
+            background: white;
+            border-radius: 16px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+            width: 90%;
+            max-width: 600px;
+            overflow: hidden;
+        }
+
+        .wizard-header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 2rem;
+            text-align: center;
+        }
+
+        .wizard-header h1 {
+            margin: 0 0 0.5rem 0;
+            font-size: 2rem;
+        }
+
+        .wizard-header p {
+            margin: 0;
+            opacity: 0.9;
+        }
+
+        .wizard-content {
+            padding: 2rem;
+        }
+
+        .wizard-step {
+            display: none;
+        }
+
+        .wizard-step.active {
+            display: block;
+            animation: fadeIn 0.3s ease-in;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(10px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+
+        .form-label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: 600;
+            color: #374151;
+        }
+
+        .form-input {
+            width: 100%;
+            padding: 0.75rem;
+            border: 2px solid #e5e7eb;
+            border-radius: 8px;
+            font-size: 1rem;
+            transition: border-color 0.2s;
+            box-sizing: border-box;
+        }
+
+        .form-input:focus {
+            outline: none;
+            border-color: #667eea;
+        }
+
+        .path-selector {
+            display: flex;
+            gap: 0.5rem;
+        }
+
+        .path-selector input {
+            flex: 1;
+        }
+
+        .btn {
+            padding: 0.75rem 1.5rem;
+            border: none;
+            border-radius: 8px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(102, 126, 234, 0.4);
+        }
+
+        .btn-secondary {
+            background: #f3f4f6;
+            color: #374151;
+        }
+
+        .btn-secondary:hover {
+            background: #e5e7eb;
+        }
+
+        .wizard-actions {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 2rem;
+            padding-top: 2rem;
+            border-top: 1px solid #e5e7eb;
+        }
+
+        .error-message {
+            background: #fee2e2;
+            color: #dc2626;
+            padding: 0.75rem;
+            border-radius: 8px;
+            margin-bottom: 1rem;
+            display: none;
+        }
+
+        .error-message.show {
+            display: block;
+        }
+
+        .success-icon {
+            font-size: 4rem;
+            text-align: center;
+            margin-bottom: 1rem;
+        }
+
+        .info-box {
+            background: #eff6ff;
+            border-left: 4px solid #3b82f6;
+            padding: 1rem;
+            border-radius: 4px;
+            margin-bottom: 1rem;
+        }
+
+        .info-box p {
+            margin: 0;
+            color: #1e40af;
+            font-size: 0.875rem;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="wizard-container">
+        <div class="wizard-header">
+            <h1>🚀 Welcome to NexoGenix CRM</h1>
+            <p>Let's set up your CRM in just a few steps</p>
+        </div>
+
+        <div class="wizard-content">
+            <div id="error-message" class="error-message"></div>
+
+            <!-- Step 1: Welcome -->
+            <div class="wizard-step active" data-step="1">
+                <h2>Welcome!</h2>
+                <p style="color: #6b7280; margin-bottom: 2rem;">
+                    Thank you for choosing NexoGenix CRM. This setup wizard will help you configure your application and
+                    create your admin account.
+                </p>
+                <div class="info-box">
+                    <p><strong>What we'll do:</strong></p>
+                    <p>1. Choose where to store your data</p>
+                    <p>2. Create your admin account</p>
+                    <p>3. Launch your CRM</p>
+                </div>
+            </div>
+
+            <!-- Step 2: Database Location -->
+            <div class="wizard-step" data-step="2">
+                <h2>Choose Database Location</h2>
+                <p style="color: #6b7280; margin-bottom: 1.5rem;">
+                    Select where you want to store your CRM data. This location will be secure and encrypted.
+                </p>
+
+                <div class="form-group">
+                    <label class="form-label">Database Path</label>
+                    <div class="path-selector">
+                        <input type="text" id="dbPath" class="form-input" readonly>
+                        <button type="button" class="btn btn-secondary" onclick="choosePath()">Browse...</button>
+                    </div>
+                    <small style="color: #6b7280; display: block; margin-top: 0.5rem;">
+                        Default location is recommended for most users
+                    </small>
+                </div>
+
+                <div class="info-box">
+                    <p><strong>Important:</strong> Your data will be stored locally and encrypted. Make sure to backup
+                        this location regularly.</p>
+                </div>
+            </div>
+
+            <!-- Step 3: Admin Account -->
+            <div class="wizard-step" data-step="3">
+                <h2>Create Admin Account</h2>
+                <p style="color: #6b7280; margin-bottom: 1.5rem;">
+                    Set up your administrator account. You'll use these credentials to log in.
+                </p>
+
+                <form id="adminForm">
+                    <div class="form-group">
+                        <label class="form-label">Full Name *</label>
+                        <input type="text" id="adminName" class="form-input" required placeholder="John Doe">
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label">Email Address *</label>
+                        <input type="email" id="adminEmail" class="form-input" required placeholder="admin@company.com">
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label">Password *</label>
+                        <input type="password" id="adminPassword" class="form-input" required
+                            placeholder="Minimum 8 characters">
+                        <small style="color: #6b7280; display: block; margin-top: 0.5rem;">
+                            Use a strong password with letters, numbers, and symbols
+                        </small>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label">Confirm Password *</label>
+                        <input type="password" id="adminPasswordConfirm" class="form-input" required
+                            placeholder="Re-enter password">
+                    </div>
+                </form>
+            </div>
+
+            <!-- Step 4: Complete -->
+            <div class="wizard-step" data-step="4">
+                <div class="success-icon">✅</div>
+                <h2 style="text-align: center;">Setup Complete!</h2>
+                <p style="color: #6b7280; text-align: center; margin-bottom: 2rem;">
+                    Your NexoGenix CRM is ready to use. Click the button below to launch the application.
+                </p>
+
+                <div class="info-box">
+                    <p><strong>Your Settings:</strong></p>
+                    <p id="summaryPath"></p>
+                    <p id="summaryEmail"></p>
+                </div>
+            </div>
+
+            <!-- Navigation -->
+            <div class="wizard-actions">
+                <button type="button" class="btn btn-secondary" id="prevBtn" onclick="previousStep()"
+                    style="display: none;">
+                    ← Previous
+                </button>
+                <div style="flex: 1;"></div>
+                <button type="button" class="btn btn-primary" id="nextBtn" onclick="nextStep()">
+                    Next →
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <script src="setup-wizard.js"></script>
+</body>
+
+</html>

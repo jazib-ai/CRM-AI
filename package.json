@@ -1,0 +1,62 @@
+{
+  "name": "nexogenix-crm",
+  "version": "1.0.0",
+  "description": "NexoGenix CRM - Desktop Application",
+  "main": "electron/main.js",
+  "scripts": {
+    "start": "electron .",
+    "build": "electron-builder",
+    "build:win": "electron-builder --win",
+    "build:mac": "electron-builder --mac",
+    "build:linux": "electron-builder --linux",
+    "pack:win": "electron-packager . NexoGenix --platform=win32 --arch=x64 --out=dist --icon=build/icon.png --overwrite"
+  },
+  "keywords": [
+    "crm",
+    "desktop",
+    "electron"
+  ],
+  "author": "NexoGenix",
+  "license": "MIT",
+  "dependencies": {
+    "bcryptjs": "^2.4.3",
+    "better-sqlite3": "^9.0.0",
+    "body-parser": "^2.2.2",
+    "cors": "^2.8.6",
+    "electron-store": "^8.1.0",
+    "express": "^5.2.1"
+  },
+  "devDependencies": {
+    "electron": "^28.0.0",
+    "electron-builder": "^24.9.1",
+    "electron-packager": "^17.1.2"
+  },
+  "build": {
+    "appId": "com.nexogenix.crm",
+    "productName": "NexoGenix CRM",
+    "directories": {
+      "output": "dist",
+      "buildResources": "build"
+    },
+    "files": [
+      "electron/**/*",
+      "index.html",
+      "css/**/*",
+      "js/**/*",
+      "build/**/*",
+      "package.json"
+    ],
+    "win": {
+      "target": [
+        "zip"
+      ],
+      "icon": "build/icon.png"
+    },
+    "nsis": {
+      "oneClick": true,
+      "allowToChangeInstallationDirectory": false,
+      "createDesktopShortcut": true,
+      "createStartMenuShortcut": true
+    }
+  }
+}

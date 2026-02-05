@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NexoGenix - Premium Customer Management</title>
+
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Outfit:wght@500;600;700&display=swap"
+        rel="stylesheet">
+
+    <!-- Styles -->
+    <link rel="stylesheet" href="css/styles.css">
+</head>
+
+<body>
+    <div id="app">
+        <!-- Sidebar Navigation -->
+        <nav id="sidebar" class="sidebar"></nav>
+
+        <!-- Main Content Area -->
+        <main class="main-content">
+            <header id="top-navbar" class="top-navbar"></header>
+            <div id="router-view" class="content-container">
+                <!-- Content injected here via router -->
+            </div>
+        </main>
+    </div>
+
+    <!-- External Dependencies -->
+    <script src="https://cdn.sheetjs.com/xlsx-0.20.0/package/dist/xlsx.full.min.js"></script>
+
+    <!-- Scripts (Order Matters) -->
+    <script src="js/services/ElectronDataStore.js"></script>
+    <script src="js/services/RemoteDataStore.js"></script>
+    <script src="js/services/DataStore.js"></script>
+    <script src="js/services/Auth.js"></script>
+    <script src="js/components/Sidebar.js"></script>
+    <script src="js/views/Login.js"></script>
+    <script src="js/views/Settings.js"></script>
+    <script src="js/views/Dashboard.js"></script>
+    <script src="js/views/Contacts.js"></script>
+    <script src="js/views/Companies.js"></script>
+    <script src="js/views/Deals.js"></script>
+    <script src="js/views/DealDetails.js"></script>
+    <script src="js/views/ContactDetails.js"></script>
+    <script src="js/views/CompanyDetails.js"></script>
+    <script src="js/views/HRMS.js"></script>
+    <script src="js/views/EngagementDetails.js"></script>
+    <script src="js/views/Integrations.js"></script>
+    <script src="js/views/SearchResults.js"></script>
+    <script src="js/views/Insights.js"></script>
+    <script src="js/app.js"></script>
+</body>
+
+</html>
