@@ -24,7 +24,8 @@
     "body-parser": "^2.2.2",
     "cors": "^2.8.6",
     "electron-store": "^8.1.0",
-    "express": "^5.2.1"
+    "express": "^5.2.1",
+    "pg": "^8.18.0"
   },
   "devDependencies": {
     "electron": "^28.0.0",

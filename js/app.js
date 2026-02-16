@@ -15,14 +15,21 @@ class App {
         window.NexoGenix.auth = window.NexoGenix.auth || new window.NexoGenix.Auth();
 
         // Decide which Store to use
-        const isRemote = localStorage.getItem('nexogenix_remote_mode') === 'true';
-        const remoteUrl = localStorage.getItem('nexogenix_remote_url') || 'http://localhost:3000';
+        const remoteUrl = localStorage.getItem('nexogenix_remote_url');
 
-        if (isRemote) {
-            console.log('App: Initializing Remote Store at', remoteUrl);
-            window.NexoGenix.store = new window.NexoGenix.RemoteDataStore(remoteUrl);
+        let localStore;
+        if (window.electronAPI && window.electronAPI.isElectron) {
+            localStore = new window.NexoGenix.ElectronDataStore();
         } else {
-            window.NexoGenix.store = new window.NexoGenix.DataStore();
+            localStore = new window.NexoGenix.DataStore();
+        }
+
+        if (remoteUrl) {
+            console.log('App: Initializing Synced (Hybrid) Store with', remoteUrl);
+            const remoteStore = new window.NexoGenix.RemoteDataStore(remoteUrl);
+            window.NexoGenix.store = new window.NexoGenix.SyncedDataStore(localStore, remoteStore);
+        } else {
+            window.NexoGenix.store = localStore;
         }
 
         this.sidebar = new window.NexoGenix.Sidebar('sidebar');
@@ -129,7 +136,7 @@ class App {
 
     renderNavbar() {
         if (!window.NexoGenix.auth.isAuthenticated()) return;
-        
+
         const isRemote = localStorage.getItem('nexogenix_remote_mode') === 'true';
         const syncStatus = isRemote ? `
             <div id="sync-indicator" style="display: flex; align-items: center; gap: 0.5rem; background: #f1f5f9; padding: 0.4rem 0.8rem; border-radius: 20px; border: 1px solid #e2e8f0;">

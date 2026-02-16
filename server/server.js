@@ -4,17 +4,29 @@ const bodyParser = require('body-parser');
 const path = require('path');
 const bcrypt = require('bcryptjs');
 const DatabaseHandler = require('../electron/database');
+const PostgresDatabaseHandler = require('./database-postgres');
 
 const app = express();
 const PORT = process.env.PORT || 3000;
+const DATABASE_URL = process.env.DATABASE_URL;
 
 // Middleware
 app.use(cors());
 app.use(bodyParser.json());
 
-// Initialize Database
-const dbPath = path.join(__dirname, '../data/nexogenix.db');
-const db = new DatabaseHandler(dbPath);
+// Initialize Database (Async)
+let db;
+const initDb = async () => {
+    if (DATABASE_URL) {
+        console.log('Server: Using PostgreSQL database');
+        db = new PostgresDatabaseHandler(DATABASE_URL);
+    } else {
+        console.log('Server: Using SQLite database');
+        const dbPath = path.join(__dirname, '../data/nexogenix.db');
+        db = new DatabaseHandler(dbPath);
+    }
+};
+initDb();
 
 // Tracking changes for synchronization
 let lastChangeTimestamp = Date.now();
@@ -27,7 +39,7 @@ const updateSync = () => {
 app.post('/api/auth/login', async (req, res) => {
     try {
         const { email, password } = req.body;
-        const user = db.authenticateUser(email, password);
+        const user = await db.authenticateUser(email, password);
         if (user) {
             res.json({ success: true, user });
         } else {
@@ -42,8 +54,8 @@ app.post('/api/auth/register', async (req, res) => {
     try {
         const { name, email, password, role } = req.body;
         const passwordHash = await bcrypt.hash(password, 10);
-        const result = db.run(
-            'INSERT INTO users (name, email, password_hash, role) VALUES (?, ?, ?, ?)',
+        const result = await db.run(
+            'INSERT INTO users (name, email, password_hash, role) VALUES (?, ?, ?, ?) RETURNING id',
             [name, email, passwordHash, role || 'standard']
         );
         updateSync();
@@ -62,9 +74,9 @@ app.get('/api/sync/status', (req, res) => {
 const tables = ['contacts', 'companies', 'engagements', 'deals', 'activities', 'settings', 'dashboard_tasks', 'dashboard_notes', 'users'];
 
 tables.forEach(table => {
-    app.get(`/api/${table}`, (req, res) => {
+    app.get(`/api/${table}`, async (req, res) => {
         try {
-            const data = db.getAll(table);
+            const data = await db.getAll(table);
             // Hide hashes for users
             if (table === 'users') {
                 data.forEach(u => delete u.password_hash);
@@ -83,7 +95,7 @@ tables.forEach(table => {
                 data.password_hash = await bcrypt.hash(data.password, 10);
                 delete data.password;
             }
-            const result = db.insert(table, data);
+            const result = await db.insert(table, data);
             updateSync();
             res.json({ success: true, id: result.lastInsertRowid });
         } catch (error) {
@@ -98,7 +110,7 @@ tables.forEach(table => {
                 data.password_hash = await bcrypt.hash(data.password, 10);
                 delete data.password;
             }
-            db.update(table, req.params.id, data);
+            await db.update(table, req.params.id, data);
             updateSync();
             res.json({ success: true });
         } catch (error) {
@@ -106,9 +118,9 @@ tables.forEach(table => {
         }
     });
 
-    app.delete(`/api/${table}/:id`, (req, res) => {
+    app.delete(`/api/${table}/:id`, async (req, res) => {
         try {
-            db.delete(table, req.params.id);
+            await db.delete(table, req.params.id);
             updateSync();
             res.json({ success: true });
         } catch (error) {
