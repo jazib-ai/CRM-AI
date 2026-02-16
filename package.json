@@ -44,12 +44,34 @@
       "index.html",
       "css/**/*",
       "js/**/*",
-      "build/**/*",
+      "server/**/*",
+      "data/**/*",
       "package.json"
     ],
+    "mac": {
+      "target": [
+        "dmg"
+      ],
+      "icon": "build/icon.png",
+      "category": "public.app-category.business"
+    },
+    "dmg": {
+      "contents": [
+        {
+          "x": 130,
+          "y": 220
+        },
+        {
+          "x": 410,
+          "y": 220,
+          "type": "link",
+          "path": "/Applications"
+        }
+      ]
+    },
     "win": {
       "target": [
-        "zip"
+        "nsis"
       ],
       "icon": "build/icon.png"
     },
